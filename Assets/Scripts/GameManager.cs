@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,53 +12,107 @@ public class GameManager : MonoBehaviour
     public float memoriseSeconds = 10f;
     public float rowSpacing = 0.25f;
 
-    void Start() => StartCoroutine(RunRound());
+    private bool scored = false;
+
+    void Start()
+    {
+        StartCoroutine(RunRound());
+    }
 
     IEnumerator RunRound()
     {
-        SetAnswerKeyAndShowCubes();
+        SetUpRound();
         yield return new WaitForSeconds(memoriseSeconds);
         MoveCubesToRow();
     }
 
-    void SetAnswerKeyAndShowCubes()
+    // shuffle cubes, assign answers, park each cube on its socket
+    void SetUpRound()
     {
-        var shuffled = cubes.OrderBy(_ => Random.value).ToArray();
+        Shuffle(cubes);
 
         for (int i = 0; i < sockets.Length; i++)
         {
-            sockets[i].correctItemID = shuffled[i].itemID;
+            sockets[i].correctItemID = cubes[i].itemID;
 
-            var cube = shuffled[i];
+            MemoryItem cube = cubes[i];
             cube.GetComponent<Rigidbody>().isKinematic = true;
             cube.transform.position = sockets[i].transform.position;
             cube.transform.rotation = sockets[i].transform.rotation;
         }
     }
 
+    // lay all cubes out in a row the player can reach
     void MoveCubesToRow()
     {
-        foreach (var s in sockets) s.SetGrabbing(false);
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            sockets[i].SetGrabbing(false);
+        }
 
         for (int i = 0; i < cubes.Length; i++)
         {
             cubes[i].GetComponent<Rigidbody>().isKinematic = true;
-            cubes[i].transform.position =
-                basketSpot.position + new Vector3(i * rowSpacing, 0f, 0f);
+            Vector3 offset = new Vector3(i * rowSpacing, 0f, 0f);
+            cubes[i].transform.position = basketSpot.position + offset;
         }
 
-        foreach (var s in sockets) s.SetGrabbing(true);
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            sockets[i].SetGrabbing(true);
+        }
     }
 
     void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (scored == true)
+        {
+            return;
+        }
+
+        if (AllSocketsFull() == true)
+        {
+            scored = true;
             Score();
+        }
+    }
+
+    bool AllSocketsFull()
+    {
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            if (sockets[i].HeldItem() == null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void Score()
     {
-        int correct = sockets.Count(s => s.IsCorrect());
-        Debug.Log($"Score: {correct} / {sockets.Length}");
+        int correct = 0;
+
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            if (sockets[i].IsCorrect() == true)
+            {
+                correct++;
+            }
+        }
+
+        Debug.Log("Score: " + correct + " / " + sockets.Length);
+    }
+
+    // simple shuffle — swap each item with a random one
+    void Shuffle(MemoryItem[] array)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            int randomIndex = Random.Range(i, array.Length);
+            MemoryItem temp = array[i];
+            array[i] = array[randomIndex];
+            array[randomIndex] = temp;
+        }
     }
 }
