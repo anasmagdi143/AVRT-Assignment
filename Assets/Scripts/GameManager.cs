@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;   // add near the other usings
 
 public class GameManager : MonoBehaviour
 {
@@ -33,7 +34,8 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) Score();
+        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+            Score();
     }
 
     void Score()
