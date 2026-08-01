@@ -15,21 +15,20 @@ public class GameManager : MonoBehaviour
 
     IEnumerator RunTrial()
     {
-        // 1. Shuffle items, assign one per socket = answer key
+        Debug.Log("1. Trial started");
         var shuffled = items.OrderBy(_ => Random.value).ToList();
         for (int i = 0; i < sockets.Length; i++)
         {
             sockets[i].correctItemID = shuffled[i].itemID;
-            PlaceInSocket(shuffled[i], sockets[i]);   // sit cube at its slot
+            PlaceInSocket(shuffled[i], sockets[i]);
         }
+        Debug.Log("2. Setup done, waiting 10s");
 
-        // 2. Memorise window
         yield return new WaitForSeconds(memorizeSeconds);
 
-        // 3. Eject all cubes to the basket
+        Debug.Log("3. Ejecting now");
         foreach (var s in sockets) EjectFrom(s);
-
-        // player re-places from memory, then presses Space to score
+        Debug.Log("4. Eject done");
     }
 
     void Update()
