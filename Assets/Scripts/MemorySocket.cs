@@ -1,24 +1,29 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
+[RequireComponent(typeof(XRSocketInteractor))]
 public class MemorySocket : MonoBehaviour
 {
-    public string labelID;          // "A3" — fixed, this slot's name
-    public string correctItemID;    // set at runtime by the manager
+    public string labelID;   // A3, B5, etc.
+    [HideInInspector] public string correctItemID;
 
-    private XRSocketInteractor socket;
+    XRSocketInteractor socket;
 
     void Awake() => socket = GetComponent<XRSocketInteractor>();
 
-    public MemoryItem CurrentItem()
+    public MemoryItem HeldItem()
     {
-        var held = socket.hasSelection ? socket.GetOldestInteractableSelected() : null;
+        if (!socket.hasSelection) return null;
+        var held = socket.GetOldestInteractableSelected();
         return (held as MonoBehaviour)?.GetComponent<MemoryItem>();
     }
 
     public bool IsCorrect()
     {
-        var item = CurrentItem();
+        var item = HeldItem();
         return item != null && item.itemID == correctItemID;
     }
+
+    // off before moving cubes (or the socket drags them back), on for placement
+    public void SetGrabbing(bool on) => socket.enabled = on;
 }
