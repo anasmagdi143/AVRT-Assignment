@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;   // add near the other usings
+using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class GameManager : MonoBehaviour
         Debug.Log("3. Ejecting now");
         foreach (var s in sockets) EjectFrom(s);
         Debug.Log("4. Eject done");
+
+        // re-enable sockets so the player can place cubes back
+        foreach (var s in sockets)
+            s.GetComponent<XRSocketInteractor>().enabled = true;
     }
 
     void Update()
@@ -39,7 +44,16 @@ public class GameManager : MonoBehaviour
 
     void Score()
     {
-        int correct = sockets.Count(s => s.IsCorrect());
+        Debug.Log("--- Scoring ---");
+        int correct = 0;
+        foreach (var s in sockets)
+        {
+            var item = s.CurrentItem();
+            string got = item != null ? item.itemID : "EMPTY";
+            bool ok = item != null && item.itemID == s.correctItemID;
+            Debug.Log($"Socket {s.labelID}: wants {s.correctItemID}, has {got}, {(ok ? "OK" : "no")}");
+            if (ok) correct++;
+        }
         Debug.Log($"Score: {correct} / {sockets.Length}");
     }
 
@@ -51,10 +65,17 @@ public class GameManager : MonoBehaviour
         item.transform.rotation = socket.transform.rotation;
     }
 
+    int ejectIndex = 0;
     void EjectFrom(MemorySocket socket)
     {
         var item = items.First(i => i.itemID == socket.correctItemID);
-        item.GetComponent<Rigidbody>().isKinematic = false;   // unfreeze
-        item.transform.position = basketPoint.position + Random.insideUnitSphere * 0.1f;
+
+        // release the cube from this socket, then move it
+        var sock = socket.GetComponent<XRSocketInteractor>();
+        sock.enabled = false;                    // let go of the cube
+
+        item.GetComponent<Rigidbody>().isKinematic = true;
+        item.transform.position = basketPoint.position + new Vector3(ejectIndex * 0.25f, 0f, 0f);
+        ejectIndex++;
     }
 }
