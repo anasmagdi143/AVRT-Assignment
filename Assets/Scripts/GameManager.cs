@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public float rowSpacing = 0.25f;
     public float placingSeconds = 15f;
 
+    [Header("HUD")]
+    public TMPro.TextMeshPro hudText;   
+
     private bool scored = false;
     private bool canScore = false;
     private float timeLeft = 0f;
@@ -48,6 +51,10 @@ public class GameManager : MonoBehaviour
             cube.GetComponent<Rigidbody>().isKinematic = true;
             cube.transform.position = sockets[i].transform.position;
             cube.transform.rotation = sockets[i].transform.rotation;
+        }
+        if (hudText != null)
+        {
+            hudText.text = "Memorise!";
         }
     }
 
@@ -89,6 +96,11 @@ public class GameManager : MonoBehaviour
 
         // count the timer down
         timeLeft = timeLeft - Time.deltaTime;
+
+        if (hudText != null)
+        {
+            hudText.text = "Time: " + Mathf.Ceil(timeLeft).ToString();
+        }
 
         if (timeLeft <= 0f)
         {
@@ -132,6 +144,11 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log("Score: " + correct + " / " + sockets.Length);
+
+        if (hudText != null)
+        {
+            hudText.text = "Score: " + correct + " / " + sockets.Length;
+        }
     }
 
     // simple shuffle — swap each item with a random one
