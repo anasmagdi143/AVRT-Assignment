@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public float rowSpacing = 0.25f;
 
     private bool scored = false;
+    private bool canScore = false;
 
     void Start()
     {
@@ -30,6 +31,12 @@ public class GameManager : MonoBehaviour
     void SetUpRound()
     {
         Shuffle(cubes);
+
+        // sockets off so they don't grab the cubes we're about to place
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            sockets[i].SetGrabbing(false);
+        }
 
         for (int i = 0; i < sockets.Length; i++)
         {
@@ -61,10 +68,18 @@ public class GameManager : MonoBehaviour
         {
             sockets[i].SetGrabbing(true);
         }
+
+        canScore = true;   // retrieval phase begins — scoring allowed now
     }
 
     void Update()
     {
+
+        if (canScore == false)
+        {
+            return;
+        }
+
         if (scored == true)
         {
             return;
@@ -75,6 +90,7 @@ public class GameManager : MonoBehaviour
             scored = true;
             Score();
         }
+
     }
 
     bool AllSocketsFull()
