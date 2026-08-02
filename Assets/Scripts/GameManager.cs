@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
     [Header("Settings")]
     public float memoriseSeconds = 10f;
     public float rowSpacing = 0.25f;
+    public float placingSeconds = 15f;
 
     private bool scored = false;
     private bool canScore = false;
+    private float timeLeft = 0f;
 
     void Start()
     {
