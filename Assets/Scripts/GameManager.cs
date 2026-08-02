@@ -72,11 +72,11 @@ public class GameManager : MonoBehaviour
         }
 
         canScore = true;   // retrieval phase begins — scoring allowed now
+        timeLeft = placingSeconds;
     }
 
     void Update()
     {
-
         if (canScore == false)
         {
             return;
@@ -87,12 +87,24 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        // count the timer down
+        timeLeft = timeLeft - Time.deltaTime;
+
+        if (timeLeft <= 0f)
+        {
+            timeLeft = 0f;
+            scored = true;
+            Debug.Log("Time's up!");
+            Score();
+            return;
+        }
+
+        // or finish early if all cubes are placed
         if (AllSocketsFull() == true)
         {
             scored = true;
             Score();
         }
-
     }
 
     bool AllSocketsFull()
