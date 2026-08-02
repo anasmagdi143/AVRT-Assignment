@@ -8,40 +8,97 @@ public class GameManager : MonoBehaviour
     public MemoryItem[] cubes;
     public Transform basketSpot;
 
-    [Header("Settings")]
-    public float memoriseSeconds = 10f;
+    [Header("HUD")]
+    public TMPro.TextMeshPro hudText;   // drag the HUD object here
+
+    [Header("Layout")]
     public float rowSpacing = 0.25f;
+
+    [Header("Placing timer")]
     public float placingSeconds = 15f;
 
-    [Header("HUD")]
-    public TMPro.TextMeshPro hudText;   
+    [Header("Rounds")]
+    public float startMemoriseSeconds = 10f;   // round 1 memorise time
+    public float memoriseDrop = 1.5f;          // seconds removed each round
+    public float minMemoriseSeconds = 3f;      // never go below this
+    public int passThreshold = 6;              // need this many correct to survive
+    public float roundGap = 2.5f;              // pause between rounds
 
     private bool scored = false;
     private bool canScore = false;
     private float timeLeft = 0f;
 
+    private int roundNumber = 0;
+    private int lastRoundCorrect = 0;
+    private bool gameOver = false;
+
     void Start()
     {
-        StartCoroutine(RunRound());
+        StartCoroutine(GameLoop());
+    }
+
+    IEnumerator GameLoop()
+    {
+        while (gameOver == false)
+        {
+            roundNumber = roundNumber + 1;
+            yield return StartCoroutine(RunRound());
+
+            if (lastRoundCorrect < passThreshold)
+            {
+                gameOver = true;
+                ShowGameOver();
+            }
+            else
+            {
+                yield return new WaitForSeconds(roundGap);
+            }
+        }
     }
 
     IEnumerator RunRound()
     {
+        scored = false;
+        canScore = false;
+
         SetUpRound();
-        yield return new WaitForSeconds(memoriseSeconds);
+
+        // memorise time shrinks each round, down to the minimum
+        float memoriseTime = startMemoriseSeconds - (memoriseDrop * (roundNumber - 1));
+        if (memoriseTime < minMemoriseSeconds)
+        {
+            memoriseTime = minMemoriseSeconds;
+        }
+
+        if (hudText != null)
+        {
+            hudText.text = "Round " + roundNumber + " - Memorise!";
+        }
+
+        yield return new WaitForSeconds(memoriseTime);
+
         MoveCubesToRow();
+
+        // wait until the round finishes (all placed, or timer ran out)
+        while (scored == false)
+        {
+            yield return null;
+        }
+
+        // let the player see their score before the next round
+        yield return new WaitForSeconds(1.5f);
     }
 
     // shuffle cubes, assign answers, park each cube on its socket
     void SetUpRound()
     {
-        Shuffle(cubes);
-
-        // sockets off so they don't grab the cubes we're about to place
+        // release any cubes left in sockets from the previous round
         for (int i = 0; i < sockets.Length; i++)
         {
             sockets[i].SetGrabbing(false);
         }
+
+        Shuffle(cubes);
 
         for (int i = 0; i < sockets.Length; i++)
         {
@@ -51,10 +108,6 @@ public class GameManager : MonoBehaviour
             cube.GetComponent<Rigidbody>().isKinematic = true;
             cube.transform.position = sockets[i].transform.position;
             cube.transform.rotation = sockets[i].transform.rotation;
-        }
-        if (hudText != null)
-        {
-            hudText.text = "Memorise!";
         }
     }
 
@@ -78,7 +131,7 @@ public class GameManager : MonoBehaviour
             sockets[i].SetGrabbing(true);
         }
 
-        canScore = true;   // retrieval phase begins — scoring allowed now
+        canScore = true;
         timeLeft = placingSeconds;
     }
 
@@ -94,7 +147,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // count the timer down
+        // count the placing timer down
         timeLeft = timeLeft - Time.deltaTime;
 
         if (hudText != null)
@@ -111,7 +164,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // or finish early if all cubes are placed
         if (AllSocketsFull() == true)
         {
             scored = true;
@@ -143,12 +195,23 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        Debug.Log("Score: " + correct + " / " + sockets.Length);
+        lastRoundCorrect = correct;
+
+        Debug.Log("Round " + roundNumber + " score: " + correct + " / " + sockets.Length);
 
         if (hudText != null)
         {
-            hudText.text = "Score: " + correct + " / " + sockets.Length;
+            hudText.text = "Round " + roundNumber + ": " + correct + " / " + sockets.Length;
         }
+    }
+
+    void ShowGameOver()
+    {
+        if (hudText != null)
+        {
+            hudText.text = "Game Over!\nYou reached round " + roundNumber;
+        }
+        Debug.Log("Game over at round " + roundNumber);
     }
 
     // simple shuffle — swap each item with a random one
