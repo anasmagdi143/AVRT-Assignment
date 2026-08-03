@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
     {
         if (hudText != null)
         {
-            hudText.text = "Game Over!\nYou reached round " + roundNumber;
+            hudText.text = "Game Over!\nYou reached round " + roundNumber + "\nPress A to restart";
         }
         Debug.Log("Game over at round " + roundNumber);
     }
