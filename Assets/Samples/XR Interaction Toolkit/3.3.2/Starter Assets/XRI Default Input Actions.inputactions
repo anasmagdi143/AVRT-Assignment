@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "XRI Default Input Actions",
     "maps": [
         {
@@ -1971,6 +1972,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "A press",
+                    "type": "Button",
+                    "id": "3b21f3dd-1b42-4a14-a002-86b4a014bd95",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Select Value",
                     "type": "Value",
                     "id": "39bbf1ac-21a3-413d-90f6-6dbf6efeaabe",
@@ -2134,6 +2144,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b829b739-8e50-47a8-b407-a3e425bd4aac",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

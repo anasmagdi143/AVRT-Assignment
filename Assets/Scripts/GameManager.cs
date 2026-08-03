@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     [Header("HUD")]
     public TMPro.TextMeshPro hudText;   // drag the HUD object here
+
+    [Header("Restart")]
+    public InputActionReference restartAction;   // drag the A-button action here
 
     [Header("Layout")]
     public float rowSpacing = 0.25f;
@@ -137,6 +141,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (restartAction != null && restartAction.action.WasPressedThisFrame())
+        {
+            RestartGame();
+        }
         if (canScore == false)
         {
             return;
@@ -212,6 +220,19 @@ public class GameManager : MonoBehaviour
             hudText.text = "Game Over!\nYou reached round " + roundNumber;
         }
         Debug.Log("Game over at round " + roundNumber);
+    }
+
+    void RestartGame()
+    {
+        StopAllCoroutines();
+
+        roundNumber = 0;
+        lastRoundCorrect = 0;
+        gameOver = false;
+        scored = false;
+        canScore = false;
+
+        StartCoroutine(GameLoop());
     }
 
     // simple shuffle — swap each item with a random one
