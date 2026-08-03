@@ -976,6 +976,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "X press",
+                    "type": "Button",
+                    "id": "29b0d9eb-7994-43d0-96b4-c5575baff30f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1284,6 +1293,17 @@
                     "processors": "ScaleVector2(x=0),StickDeadzone",
                     "groups": "",
                     "action": "Translate Manipulation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f554868f-2162-4bf3-9636-477e62a55b7f",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -1972,15 +1992,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "A press",
-                    "type": "Button",
-                    "id": "3b21f3dd-1b42-4a14-a002-86b4a014bd95",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Select Value",
                     "type": "Value",
                     "id": "39bbf1ac-21a3-413d-90f6-6dbf6efeaabe",
@@ -2144,17 +2155,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Select",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b829b739-8e50-47a8-b407-a3e425bd4aac",
-                    "path": "<XRController>{RightHand}/primaryButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "A press",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
