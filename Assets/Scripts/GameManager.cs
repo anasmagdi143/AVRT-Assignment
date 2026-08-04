@@ -10,10 +10,10 @@ public class GameManager : MonoBehaviour
     public Transform basketSpot;
 
     [Header("HUD")]
-    public TMPro.TextMeshPro hudText;   // drag the HUD object here
+    public TMPro.TextMeshPro hudText;   
 
     [Header("Restart")]
-    public InputActionReference restartAction;   // drag the A-button action here
+    public InputActionReference restartAction;   
 
     [Header("Layout")]
     public float rowSpacing = 0.25f;
@@ -22,11 +22,11 @@ public class GameManager : MonoBehaviour
     public float placingSeconds = 15f;
 
     [Header("Rounds")]
-    public float startMemoriseSeconds = 10f;   // round 1 memorise time
-    public float memoriseDrop = 1.5f;          // seconds removed each round
-    public float minMemoriseSeconds = 3f;      // never go below this
-    public int passThreshold = 6;              // need this many correct to survive
-    public float roundGap = 2.5f;              // pause between rounds
+    public float startMemoriseSeconds = 10f;   
+    public float memoriseDrop = 1.5f;          
+    public float minMemoriseSeconds = 3f;      
+    public int passThreshold = 6;              
+    public float roundGap = 2.5f;              
 
     private bool scored = false;
     private bool canScore = false;
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
 
         SetUpRound();
 
-        // memorise time shrinks each round, down to the minimum
+        
         float memoriseTime = startMemoriseSeconds - (memoriseDrop * (roundNumber - 1));
         if (memoriseTime < minMemoriseSeconds)
         {
@@ -83,20 +83,20 @@ public class GameManager : MonoBehaviour
 
         MoveCubesToRow();
 
-        // wait until the round finishes (all placed, or timer ran out)
+        
         while (scored == false)
         {
             yield return null;
         }
 
-        // let the player see their score before the next round
+        
         yield return new WaitForSeconds(1.5f);
     }
 
-    // shuffle cubes, assign answers, park each cube on its socket
+    
     void SetUpRound()
     {
-        // release any cubes left in sockets from the previous round
+        
         for (int i = 0; i < sockets.Length; i++)
         {
             sockets[i].SetGrabbing(false);
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // lay all cubes out in a row the player can reach
+    
     void MoveCubesToRow()
     {
         for (int i = 0; i < sockets.Length; i++)
@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GameLoop());
     }
 
-    // simple shuffle — swap each item with a random one
+    // simple shuffle 
     void Shuffle(MemoryItem[] array)
     {
         for (int i = 0; i < array.Length; i++)
