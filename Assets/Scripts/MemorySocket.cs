@@ -3,7 +3,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class MemorySocket : MonoBehaviour
 {
-    public string labelID;   // A3, B5, etc.
+    public string labelID;   
     public string correctItemID;
 
     private XRSocketInteractor socket;
@@ -13,7 +13,7 @@ public class MemorySocket : MonoBehaviour
         socket = GetComponent<XRSocketInteractor>();
     }
 
-    // returns the cube in this socket, or null if empty
+    
     public MemoryItem HeldItem()
     {
         if (socket.hasSelection == false)
@@ -44,7 +44,7 @@ public class MemorySocket : MonoBehaviour
         return item.itemID == correctItemID;
     }
 
-    // off before moving cubes, on for placement
+    
     public void SetGrabbing(bool on)
     {
         socket.enabled = on;
