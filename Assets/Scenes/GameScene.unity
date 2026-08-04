@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: N7
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &4538305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1652,6 +1653,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: D6
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &498739433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3122,6 +3124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: J5
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &898383069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3619,6 +3622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: B2
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &1188744160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4857,6 +4861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: C4
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &1688635773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4980,6 +4985,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: E1
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &1705759810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5198,6 +5204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemorySocket
   labelID: A3
   correctItemID: 
+  placeSound: {fileID: 8300000, guid: c58e325e06b5d2540999de45aff2651a, type: 3}
 --- !u!114 &1802908542
 MonoBehaviour:
   m_ObjectHideFlags: 0
